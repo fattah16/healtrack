@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealTrack - Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Navbar */
+        nav {
+            background-color: white;
+            box-shadow: var(--shadow);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+            animation: pulse 2s infinite;
+            text-decoration: none;
+        }
+        
+        .logo i {
+            color: var(--secondary);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .nav-links a.active {
+            color: var(--primary);
+        }
+        
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        /* Main content */
+        main {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            width: 100%;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .greeting {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .greeting h1 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .greeting p {
+            color: #555;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.7rem 1.2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #27ae60;
+        }
+        
+        .btn-outline {
+            border: 1px solid var(--primary);
+            background-color: transparent;
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        /* Dashboard grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+        
+        .dashboard-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .card-title i {
+            color: var(--primary);
+        }
+        
+        .card-action {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        /* Recovery progress */
+        .recovery-progress {
+            grid-column: 1;
+        }
+        
+        .progress-item {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .progress-item:last-child {
+            border-bottom: none;
+        }
+        
+        .wound-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+        
+        .progress-details {
+            flex: 1;
+        }
+        
+        .wound-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .wound-tag {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--primary);
+            font-size: 0.8rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+        
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background-color: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0.8rem 0;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 1s ease-in-out;
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #777;
+        }
+        
+        .progress-stats {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .stat i {
+            color: var(--primary);
+        }
+        
+        /* Upcoming reminders */
+        .reminders {
+            grid-column: 2;
+            grid-row: span 2;
+        }
+        
+        .reminder-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .reminder-item:last-child {
+            border-bottom: none;
+        }
+        
+        .reminder-icon {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .reminder-details {
+            flex: 1;
+        }
+        
+        .reminder-title {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+        
+        .reminder-time {
+            font-size: 0.9rem;
+            color: #777;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .reminder-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .reminder-btn {
+            padding: 0.3rem 0.7rem;
+            font-size: 0.8rem;
+            border-radius: 4px;
+        }
+        
+        /* Health metrics */
+        .health-metrics {
+            grid-column: 1;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+        
+        .metric-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.2rem;
+            text-align: center;
+        }
+        
+        .metric-icon {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+        
+        .metric-label {
+            font-size: 0.9rem;
+            color: #777;
+        }
+        
+        .metric-trend {
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.2rem;
+            margin-top: 0.5rem;
+        }
+        
+        .trend-up {
+            color: var(--secondary);
+        }
+        
+        .trend-down {
+            color: var(--danger);
+        }
+        
+        /* Recent activity */
+        .recent-activity {
+            grid-column: 1;
+        }
+        
+        .activity-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-dot {
+            position: relative;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            background-color: var(--primary);
+            border-radius: 50%;
+        }
+        
+        .dot-line {
+            position: absolute;
+            top: 12px;
+            left: 5px;
+            width: 2px;
+            height: calc(100% - 12px);
+            background-color: #ddd;
+        }
+        
+        .activity-item:last-child .dot-line {
+            display: none;
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-text {
+            margin-bottom: 0.3rem;
+        }
+        
+        .activity-text strong {
+            color: var(--dark);
+        }
+        
+        .activity-time {
+            font-size: 0.8rem;
+            color: #777;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+        
+        .footer-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-links a {
+            color: var(--light);
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .reminders {
+                grid-column: 1;
+                grid-row: auto;
+            }
+            
+            .health-metrics {
+                grid-column: 1;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .action-buttons {
+                width: 100%;
+            }
+            
+            .btn {
+                flex: 1;
+                justify-content: center;
+            }
+            
+            .progress-item {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .wound-image {
+                width: 100%;
+                height: 150px;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>HealTrack</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="dashboard.html" class="active">Dashboard</a>
+                <a href="history.html">History</a>
+                <a href="resources.html">Resources</a>
+            </div>
+            <div class="user-actions">
+                <div class="user-profile">
+                    <div class="avatar">JS</div>
+                    <span>John Smith</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <main>
+        <div class="dashboard-header">
+            <div class="greeting">
+                <h1>Welcome back, John!</h1>
+                <p>Here's your recovery progress and today's tasks</p>
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-primary">
+                    <i class="fas fa-camera"></i>
+                    New Analysis
+                </button>
+                <button class="btn btn-secondary">
+                    <i class="fas fa-bell"></i>
+                    Set Reminder
+                </button>
+            </div>
+        </div>
+        
+        <div class="dashboard-grid">
+            <div class="dashboard-card recovery-progress">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-chart-line"></i>
+                        Recovery Progress
+                    </div>
+                    <a href="history.html" class="card-action">
+                        View All <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+                
+                <div class="progress-item">
+                    <img src="/api/placeholder/80/80" alt="Surgical Incision" class="wound-image">
+                    <div class="progress-details">
+                        <div class="wound-name">
+                            Surgical Incision <span class="wound-tag">Abdomen</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 65%; background-color: var(--primary);"></div>
+                        </div>
+                        <div class="progress-info">
+                            <span>Started May 1, 2025</span>
+                            <span>65% Healed</span>
+                        </div>
+                        <div class="progress-stats">
+                            <div class="stat">
+                                <i class="fas fa-calendar-check"></i>
+                                <span>7 days</span>
+                            </div>
+                            <div class="stat">
+                                <i class="fas fa-camera"></i>
+                                <span>5 photos</span>
+                            </div>
+                            <div class="stat">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Improving</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="progress-item">
+                    <img src="/api/placeholder/80/80" alt="Knee Injury" class="wound-image">
+                    <div class="progress-details">
+                        <div class="wound-name">
+                            Knee Injury <span class="wound-tag">Right Leg</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 85%; background-color: var(--secondary);"></div>
+                        </div>
+                        <div class="progress-info">
+                            <span>Started April 20, 2025</span>
+                            <span>85% Healed</span>
+                        </div>
+                        <div class="progress-stats">
+                            <div class="stat">
+                                <i class="fas fa-calendar-check"></i>
+                                <span>18 days</span>
+                            </div>
+                            <div class="stat">
+                                <i class="fas fa-camera"></i>
+                                <span>7 photos</span>
+                            </div>
+                            <div class="stat">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Almost healed</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-card reminders">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-bell"></i>
+                        Upcoming Reminders
+                    </div>
+                    <a href="#" class="card-action">
+                        Add New <i class="fas fa-plus"></i>
+                    </a>
+                </div>
+                
+                <div class="reminder-item">
+                    <div class="reminder-icon">
+                        <i class="fas fa-pills"></i>
+                    </div>
+                    <div class="reminder-details">
+                        <div class="reminder-title">Take Medication</div>
+                        <div class="reminder-time">
+                            <i class="far fa-clock"></i>
+                            Today, 12:00 PM
+                        </div>
+                        <div class="reminder-actions">
+                            <button class="btn btn-primary reminder-btn">Done</button>
+                            <button class="btn btn-outline reminder-btn">Snooze</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reminder-item">
+                    <div class="reminder-icon">
+                        <i class="fas fa-band-aid"></i>
+                    </div>
+                    <div class="reminder-details">
+                        <div class="reminder-title">Change Dressing</div>
+                        <div class="reminder-time">
+                            <i class="far fa-clock"></i>
+                            Today, 6:00 PM
+                        </div>
+                        <div class="reminder-actions">
+                            <button class="btn btn-primary reminder-btn">Done</button>
+                            <button class="btn btn-outline reminder-btn">Snooze</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reminder-item">
+                    <div class="reminder-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <div class="reminder-details">
+                        <div class="reminder-title">Take Progress Photo</div>
+                        <div class="reminder-time">
+                            <i class="far fa-clock"></i>
+                            Tomorrow, 9:00 AM
+                        </div>
+                        <div class="reminder-actions">
+                            <button class="btn btn-primary reminder-btn">Done</button>
+                            <button class="btn btn-outline reminder-btn">Snooze</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reminder-item">
+                    <div class="reminder-icon">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <div class="reminder-details">
+                        <div class="reminder-title">Doctor Appointment</div>
+                        <div class="reminder-time">
+                            <i class="far fa-calendar-alt"></i>
+                            May 12, 2025, 2:30 PM
+                        </div>
+                        <div class="reminder-actions">
+                            <button class="btn btn-primary reminder-btn">Confirm</button>
+                            <button class="btn btn-outline reminder-btn">Reschedule</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-card health-metrics">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-heartbeat"></i>
+                        Health Metrics
+                    </div>
+                    <a href="#" class="card-action">
+                        More Details <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+                
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-walking"></i>
+                        </div>
+                        <div class="metric-value">6,532</div>
+                        <div class="metric-label">Steps Today</div>
+                        <div class="metric-trend trend-up">
+                            <i class="fas fa-arrow-up"></i>
+                            12% from yesterday
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-bed"></i>
+                        </div>
+                        <div class="metric-value">7.2h</div>
+                        <div class="metric-label">Sleep Last Night</div>
+                        <div class="metric-trend trend-up">
+                            <i class="fas fa-arrow-up"></i>
+                            0.5h from average
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-thermometer"></i>
+                        </div>
+                        <div class="metric-value">98.6°F</div>
+                        <div class="metric-label">Temperature</div>
+                        <div class="metric-trend">
+                            <i class="fas fa-equals"></i>
+                            Normal
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-card recent-activity">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-history"></i>
+                        Recent Activity
+                    </div>
+                    <a href="history.html" class="card-action">
+                        View All <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-dot">
+                        <div class="dot"></div>
+                        <div class="dot-line"></div>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-text">
+                            You added a new <strong>wound photo</strong> for Surgical Incision
+                        </div>
+                        <div class="activity-time">Today, 10:30 AM</div>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-dot">
+                        <div class="dot"></div>
+                        <div class="dot-line"></div>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-text">
+                            You completed <strong>medication reminder</strong>
+                        </div>
+                        <div class="activity-time">Today, 8:00 AM</div>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-dot">
+                        <div class="dot"></div>
+                        <div class="dot-line"></div>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-text">
+                            You chatted with <strong>Recovery Assistant</strong>
+                        </div>
+                        <div class="activity-time">Yesterday, 9:15 PM</div>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-dot">
+                        <div class="dot"></div>
+                        <div class="dot-line"></div>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-text">
+                            You updated your <strong>pain level</strong> to 2 (Moderate)
+                        </div>
+                        <div class="activity-time">Yesterday, 6:45 PM</div>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-dot">
+                        <div class="dot"></div>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-text">
+                            You changed dressing for <strong>Knee Injury</strong>
+                        </div>
+                        <div class="activity-time">Yesterday, 6:30 PM</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>HealTrack</span>
+            </div>
+            <div class="footer-links">
+                <a href="#">About Us</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Help Center</a>
+                <a href="#">Contact Us</a>
+            </div>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+            <div class="copyright">
+                &copy; 2025 HealTrack. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Animation for elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add staggered animation to dashboard cards
+            const cards = document.querySelectorAll('.dashboard-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${0.1 + (index * 0.1)}s`;
+            });
+            
+            // Add staggered animation to metrics cards
+            const metricCards = document.querySelectorAll('.metric-card');
+            metricCards.forEach((card, index) => {
+                card.style.animationDelay = `${0.4 + (index * 0.1)}s`;
+            card.style.animation = 'fadeIn 0.5s ease-in-out';
+            card.style.animationFillMode = 'both';
+        });
+
+        // Additional dashboard script functions can be added here
+        // For example, handling "New Analysis" and "Set Reminder" button clicks
+
+        // Example: Alert on New Analysis button click
+        const newAnalysisBtn = document.querySelector('.btn-primary');
+        if (newAnalysisBtn) {
+            newAnalysisBtn.addEventListener('click', () => {
+                alert('New Analysis feature coming soon!');
+            });
+        }
+
+        // Example: Alert on Set Reminder button click
+        const setReminderBtn = document.querySelector('.btn-secondary');
+        if (setReminderBtn) {
+            setReminderBtn.addEventListener('click', () => {
+                alert('Set Reminder feature coming soon!');
+            });
+        }
+    });
+    </script> 
+   
+   </body>  
+   </html>           

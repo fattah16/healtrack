@@ -1,150 +1,1349 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>loruki</title>
-  <link rel="stylesheet" href="./index.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealTrack - Wound Recovery Monitoring</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Navbar */
+        nav {
+            background-color: white;
+            box-shadow: var(--shadow);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+            animation: pulse 2s infinite;
+        }
+        
+        .logo i {
+            color: var(--secondary);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-outline {
+            border: 1px solid var(--primary);
+            background-color: transparent;
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        /* Main content */
+        main {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            width: 100%;
+        }
+        
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            color: #555;
+            max-width: 700px;
+            margin-bottom: 2rem;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            transition: transform 0.3s;
+            animation: fadeIn 1s ease-in-out;
+            animation-fill-mode: both;
+        }
+        
+        .feature-card:nth-child(1) { animation-delay: 0.2s; }
+        .feature-card:nth-child(2) { animation-delay: 0.4s; }
+        .feature-card:nth-child(3) { animation-delay: 0.6s; }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .feature-card p {
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        /* Wound analysis section */
+        .wound-analysis {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-bottom: 3rem;
+            animation: fadeIn 1s ease-in-out;
+            animation-delay: 0.8s;
+            animation-fill-mode: both;
+        }
+        
+        .wound-analysis h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--dark);
+        }
+        
+        .analysis-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .upload-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .upload-box {
+            width: 100%;
+            max-width: 500px;
+            border: 2px dashed var(--primary);
+            border-radius: 10px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upload-box:hover {
+            border-color: var(--secondary);
+            background-color: rgba(46, 204, 113, 0.05);
+        }
+        
+        .upload-box i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .upload-box p {
+            color: #555;
+            margin-bottom: 1rem;
+        }
+        
+        .drag-info {
+            font-size: 0.9rem;
+            color: #888;
+        }
+        
+        .camera-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .camera-btn:hover {
+            background-color: #27ae60;
+        }
+        
+        .pain-level {
+            margin-top: 2rem;
+        }
+        
+        .pain-level h3 {
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .pain-scale {
+            display: flex;
+            justify-content: space-between;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .pain-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .pain-option:hover {
+            transform: scale(1.1);
+        }
+        
+        .pain-face {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .pain-level-0 .pain-face { color: #2ecc71; }
+        .pain-level-1 .pain-face { color: #27ae60; }
+        .pain-level-2 .pain-face { color: #f1c40f; }
+        .pain-level-3 .pain-face { color: #f39c12; }
+        .pain-level-4 .pain-face { color: #e67e22; }
+        .pain-level-5 .pain-face { color: #e74c3c; }
+        
+        .pain-value {
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .pain-desc {
+            font-size: 0.8rem;
+            color: #888;
+            text-align: center;
+        }
+        
+        .analysis-result {
+            display: none;
+            border-top: 1px solid #eee;
+            padding-top: 2rem;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .result-container {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .severity {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .severity-moderate {
+            color: var(--warning);
+        }
+        
+        .healing-progress {
+            margin-bottom: 1.5rem;
+        }
+        
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            background-color: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0.5rem 0 1rem;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: var(--secondary);
+            width: 65%;
+            border-radius: 10px;
+            transition: width 1s ease-in-out;
+        }
+        
+        .recovery-tips {
+            margin-bottom: 1.5rem;
+        }
+        
+        .tip-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .tip-icon {
+            color: var(--primary);
+            margin-top: 3px;
+        }
+        
+        .recovery-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .action-btn {
+            flex: 1;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        /* Chat Section */
+        .chat-section {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            animation: fadeIn 1s ease-in-out;
+            animation-delay: 1s;
+            animation-fill-mode: both;
+        }
+        
+        .chat-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .chat-header h2 {
+            font-size: 1.2rem;
+            flex: 1;
+        }
+        
+        .chat-body {
+            height: 400px;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+        
+        .message {
+            margin-bottom: 1.5rem;
+            max-width: 80%;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .message.incoming {
+            margin-right: auto;
+        }
+        
+        .message.outgoing {
+            margin-left: auto;
+        }
+        
+        .message-content {
+            padding: 1rem;
+            border-radius: 10px;
+        }
+        
+        .incoming .message-content {
+            background-color: #e9e9eb;
+        }
+        
+        .outgoing .message-content {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .message-meta {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 0.3rem;
+            margin-left: 0.5rem;
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 1rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .chat-input input:focus {
+            border-color: var(--primary);
+        }
+        
+        .send-btn {
+            margin-left: 0.5rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .send-btn:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+        
+        .footer-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-links a {
+            color: var(--light);
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .pain-scale {
+                overflow-x: auto;
+                padding-bottom: 1rem;
+            }
+            
+            .recovery-actions {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+        
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(52, 152, 219, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: rotate 1s ease-in-out infinite;
+            margin: 0 auto;
+        }
+        
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 120px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Camera modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            padding: 2rem;
+            animation: fadeIn 0.3s;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+        }
+        
+        .close-btn {
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #555;
+        }
+        
+        .camera-container {
+            margin-bottom: 1.5rem;
+        }
+        
+        #camera-feed {
+            width: 100%;
+            height: 300px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .camera-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+    </style>
 </head>
 <body>
-  
-    <div class="nav-bar">
-      <div class="logo">
-        <i>luruki</i>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="">home</a></li>
-          <li><a href="">features</a></li>
-          <li><a href="">docs</a></li>
-        </ul>
-      </nav>
-    </div>
-     
-    <section class="hero">
-      <div class="hero-text">
-        <h1>Easier Development</h1>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. 
-          <br>Accusamus ratione autem minima! Tempore quam consequatur facere obcaecati recusandae ut sint.</p>
-        <button class="btn"> Read More</button>
-      </div>
- 
-      <div class="hero-form">
-        <h1>Reqest a Demo</h1>
-        <div class="name">
-          <input type="text" name="name" placeholder="name">
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>HealTrack</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="history.html">History</a>
+                <a href="resources.html">Resources</a>
+            </div>
+            <div class="user-actions">
+                <button class="btn btn-outline">Login</button>
+                <button class="btn btn-primary">Sign Up</button>
+            </div>
         </div>
-        <div class="name">
-          <input type="text" name="name" id="name" placeholder="name">
-        </div>
-        <div>
-          <input type="email" name="email" id="email" placeholder="email">
-        </div>
+    </nav>
+    
+    <main>
+        <section class="hero">
+            <h1>Track Your Wound Recovery Journey</h1>
+            <p>Monitor healing progress, get personalized tips, and ensure optimal recovery with our advanced wound analysis technology.</p>
+            <button class="btn btn-primary">Get Started</button>
+        </section>
         
-        <input type="submit" value="send" class="btn">
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <h3>Photo Analysis</h3>
+                <p>Take photos of your wound or surgical cut and let our AI analyze the healing progress, detect potential issues, and provide personalized recommendations.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Progress Tracking</h3>
+                <p>Monitor your healing journey over time with visual progress tracking. Compare photos, see improvement statistics, and celebrate recovery milestones.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3>Recovery Assistant</h3>
+                <p>Chat with our intelligent recovery assistant for real-time advice, answers to your questions, and support throughout your healing process.</p>
+            </div>
+        </section>
         
-      </div>
-      
-    </section>
-   
-      
-  
-   <section class="about">
-      <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. 
-        <br>Dignissimos quos exercitationem 
-        <br>dolores perspiciatis consectetur doloremque quidem <br>soluta temporibus repellat suscipit!</p>
-      <div class="box">
-        <div class="about-card">
-          <img src="./ayoade.jpg" alt="">
-          <h1>123455</h1>
-          <p>gdgdhd</p>
+        <section class="wound-analysis">
+            <h2>Analyze Your Wound</h2>
+            <div class="analysis-container">
+                <div class="upload-section">
+                    <div class="upload-box" id="drop-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Drag & drop your wound photo here</p>
+                        <span class="drag-info">or click to select a file</span>
+                        <input type="file" id="file-input" style="display: none;" accept="image/*">
+                    </div>
+                    <button class="btn camera-btn" id="open-camera">
+                        <i class="fas fa-camera"></i>
+                        Take a photo now
+                    </button>
+                </div>
+                
+                <div class="pain-level">
+                    <h3>How would you rate your pain level?</h3>
+                    <div class="pain-scale">
+                        <div class="pain-option pain-level-0">
+                            <div class="pain-face">😊</div>
+                            <div class="pain-value">0</div>
+                            <div class="pain-desc">No Pain</div>
+                        </div>
+                        <div class="pain-option pain-level-1">
+                            <div class="pain-face">🙂</div>
+                            <div class="pain-value">1</div>
+                            <div class="pain-desc">Mild</div>
+                        </div>
+                        <div class="pain-option pain-level-2">
+                            <div class="pain-face">😐</div>
+                            <div class="pain-value">2</div>
+                            <div class="pain-desc">Moderate</div>
+                        </div>
+                        <div class="pain-option pain-level-3">
+                            <div class="pain-face">😕</div>
+                            <div class="pain-value">3</div>
+                            <div class="pain-desc">Uncomfortable</div>
+                        </div>
+                        <div class="pain-option pain-level-4">
+                            <div class="pain-face">😣</div>
+                            <div class="pain-value">4</div>
+                            <div class="pain-desc">Severe</div>
+                        </div>
+                        <div class="pain-option pain-level-5">
+                            <div class="pain-face">😫</div>
+                            <div class="pain-value">5</div>
+                            <div class="pain-desc">Extreme</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" id="analyze-btn">Analyze & Get Recovery Tips</button>
+                
+                <div class="analysis-result" id="analysis-result">
+                    <h3>Analysis Results</h3>
+                    <div class="result-container">
+                        <div class="result-header">
+                            <div class="severity severity-moderate">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>Moderate Concern</span>
+                            </div>
+                            <span>Analyzed on May 8, 2025</span>
+                        </div>
+                        
+                        <div class="healing-progress">
+                            <h4>Healing Progress</h4>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar"></div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Just Started</span>
+                                <span>65% Healed</span>
+                                <span>Fully Healed</span>
+                            </div>
+                        </div>
+                        
+                        <div class="recovery-tips">
+                            <h4>Recovery Tips</h4>
+                            <div class="tip-item">
+                                <div class="tip-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div>
+                                    <strong>Clean the area daily</strong>
+                                    <p>Gently clean with mild soap and water, pat dry with a clean towel.</p>
+                                </div>
+                            </div>
+                            <div class="tip-item">
+                                <div class="tip-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div>
+                                    <strong>Apply recommended ointment</strong>
+                                    <p>Use a thin layer of antibiotic ointment and cover with a sterile bandage.</p>
+                                </div>
+                            </div>
+                            <div class="tip-item">
+                                <div class="tip-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div>
+                                    <strong>Watch for signs of infection</strong>
+                                    <p>Monitor for increased redness, swelling, warmth, or discharge.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="recovery-actions">
+                            <button class="btn btn-primary action-btn">
+                                <i class="fas fa-calendar-alt"></i>
+                                Set Reminder
+                            </button>
+                            <button class="btn btn-outline action-btn">
+                                <i class="fas fa-file-medical"></i>
+                                Save to History
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="chat-section">
+            <div class="chat-header">
+                <i class="fas fa-robot"></i>
+                <h2>Recovery Assistant</h2>
+                <div class="tooltip">
+                    <i class="fas fa-info-circle"></i>
+                    <span class="tooltip-text">Ask questions about your recovery</span>
+                </div>
+            </div>
+            <div class="chat-body" id="chat-body">
+                <div class="message incoming">
+                    <div class="message-content">
+                        Hello! I'm your Recovery Assistant. How can I help with your healing journey today?
+                    </div>
+                    <div class="message-meta">Today, 10:30 AM</div>
+                </div>
+                <div class="message outgoing">
+                    <div class="message-content">
+                        My surgical incision looks a bit red. Is that normal?
+                    </div>
+                    <div class="message-meta">Today, 10:31 AM</div>
+                </div>
+                <div class="message incoming">
+                    <div class="message-content">
+                        Some redness around the incision is normal in the first few days after surgery. However, if the redness is spreading, feels hot to touch, or is accompanied by severe pain, swelling, or discharge, you should contact your healthcare provider as these could be signs of infection.
+                    </div>
+                    <div class="message-meta">Today, 10:32 AM</div>
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" placeholder="Type your question here..." id="chat-input-field">
+                <button class="send-btn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>HealTrack</span>
+            </div>
+            <div class="footer-links">
+                <a href="#">About Us</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Help Center</a>
+                <a href="#">Contact Us</a>
+            </div>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+            <div class="copyright">
+                &copy; 2025 HealTrack. All rights reserved.
+            </div>
         </div>
-        <div class="about-card">
-          <img src="./ayoade.jpg" alt="images">
-          <h1>123455</h1>
-          <p>gdgdhd</p>
-        </div>
-        <div class="about-card">
-          <img src="./ayoade.jpg" alt="images">
-          <h1>123455</h1>
-          <p>gdgdhd</p>
-        </div>
-      </div>
-      <div class="sub-about">
-        <img src="" alt="images">
-        <div class="sub-about-card">
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing.</p>
-        </div>
-        <div class="sub-about-card">
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing.</p>
-        </div>
-      </div>
-      
-    </section>
-    <section class="cloud">
-      <div class="cloud-text">
-        <h1>extreme cloud 
-          <br>hosting</h1>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci, Lorem ipsum dolor sit amet.amet!</p>
-        <button type="button" class="button">read more</button>
-
-      </div>
-      <img src="" alt="cloud image">
-    </section>
-
-
-    <section class="la">
-      <h1>supported languages</h1>
-      <div class="lang">
-        <div class="card">
-        <h1>nodejs</h1>
-        <img src="./ayoade.jpg" alt="lang image">
-      </div>
-      <div class="card">
-        <h1>nodejs</h1>
-        <img src="./ayoade.jpg" alt="lang image">
-      </div>
-      <div class="card">
-        <h1>nodejs</h1>
-        <img src="./ayoade.jpg" alt="lang image">
-      </div>
-      <div class="card">
-        <h1>nodejs</h1>
-        <img src="./ayoade.jpg" alt="lang image">
-      </div>
-      <div class="card">
-        <h1>nodejs</h1>
-        <img src="./ayoade.jpg" alt="lang image">
-      </div>
-      <div class="card">
-        <h1>nodejs</h1>
-        <img src="./ayoade.jpg" alt="lang image">
-      </div>
-      <div class="card">
-        <h1>nodejs</h1>
-        <img src="./ayoade.jpg" alt="lang image">
-      </div>
-
-      </div>
-      
-    </section>
-    <footer class="footer">
-      <p>loruki copyright@2020</p>
-      <div>
-        <ul>
-          <li><a href="">home</a></li>
-           <li><a href="">features</a></li>
-            <li><a href="">docs</a></li>
-        </ul>
-      </div>
-      <div>
-        <i></i>
-        <i></i>
-        <i></i>
-        <i></i>
-      </div>
     </footer>
-      
-  
-</body>
-</html>
+    
+    <!-- Camera Modal -->
+    <div class="modal" id="camera-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Take a Photo</h3>
+                <button class="close-btn" id="close-modal">&times;</button>
+            </div>
+            <div class="camera-container">
+                <video id="camera-feed" autoplay></video>
+            </div>
+            <div class="camera-actions">
+                <button class="btn btn-primary" id="capture-btn">
+                    <i class="fas fa-camera"></i>
+                    Capture Photo
+                </button>
+                <button class="btn btn-outline" id="switch-camera">
+                    <i class="fas fa-sync"></i>
+                    Switch Camera
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // DOM elements
+        const dropArea = document.getElementById('drop-area');
+        const fileInput = document.getElementById('file-input');
+        const openCameraBtn = document.getElementById('open-camera');
+        const cameraModal = document.getElementById('camera-modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        const cameraFeed = document.getElementById('camera-feed');
+        const captureBtn = document.getElementById('capture-btn');
+        const switchCameraBtn = document.getElementById('switch-camera');
+        const analyzeBtn = document.getElementById('analyze-btn');
+        const analysisResult = document.getElementById('analysis-result');
+        const painOptions = document.querySelectorAll('.pain-option');
+        const chatBody = document.getElementById('chat-body');
+        const chatInputField = document.getElementById('chat-input-field');
+        const sendBtn = document.querySelector('.send-btn');
+        
+        // Global variables
+        let selectedPainLevel = null;
+        let currentStream = null;
+        let facingMode = 'environment'; // Start with back camera
+        
+        // Initialize
+        function init() {
+            setupEventListeners();
+            animateElements();
+        }
+        
+        // Setup event listeners
+        function setupEventListeners() {
+            // File drop area functionality
+            dropArea.addEventListener('click', () => {
+                fileInput.click();
+            });
+            
+            fileInput.addEventListener('change', handleFileSelect);
+            
+            dropArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropArea.style.borderColor = 'var(--secondary)';
+                dropArea.style.backgroundColor = 'rgba(46, 204, 113, 0.05)';
+            });
+            
+            dropArea.addEventListener('dragleave', () => {
+                dropArea.style.borderColor = 'var(--primary)';
+                dropArea.style.backgroundColor = 'transparent';
+            });
+            
+            dropArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropArea.style.borderColor = 'var(--primary)';
+                dropArea.style.backgroundColor = 'transparent';
+                
+                if (e.dataTransfer.files.length) {
+                    handleFiles(e.dataTransfer.files);
+                }
+            });
+            
+            // Camera functionality
+            openCameraBtn.addEventListener('click', openCamera);
+            closeModalBtn.addEventListener('click', closeCamera);
+            captureBtn.addEventListener('click', capturePhoto);
+            switchCameraBtn.addEventListener('click', switchCamera);
+            
+            // Pain level selection
+            painOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    // Remove selected class from all options
+                    painOptions.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Add selected class to clicked option
+                    option.classList.add('selected');
+                    
+                    // Get pain level value
+                    const painValue = option.querySelector('.pain-value').textContent;
+                    selectedPainLevel = parseInt(painValue);
+                    
+                    // Visual feedback
+                    option.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        option.style.transform = 'scale(1)';
+                    }, 200);
+                });
+            });
+            
+            // Analyze button
+            analyzeBtn.addEventListener('click', analyzeWound);
+            
+            // Chat functionality
+            sendBtn.addEventListener('click', sendMessage);
+            chatInputField.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        }
+        
+        // Handle file selection
+        function handleFileSelect(e) {
+            const files = e.target.files;
+            if (files.length) {
+                handleFiles(files);
+            }
+        }
+        
+        // Process selected files
+        function handleFiles(files) {
+            const file = files[0];
+            
+            // Check if file is an image
+            if (!file.type.match('image.*')) {
+                alert('Please select an image file.');
+                return;
+            }
+            
+            // Display selected image
+            const reader = new FileReader();
+            
+            reader.onload = (e) => {
+                // Update drop area with image preview
+                dropArea.innerHTML = `
+                    <img src="${e.target.result}" alt="Wound Image" style="max-width: 100%; max-height: 200px; border-radius: 8px;">
+                    <p style="margin-top: 10px;">Image selected</p>
+                    <span class="drag-info">Click to change image</span>
+                `;
+            };
+            
+            reader.readAsDataURL(file);
+        }
+        
+        // Open camera modal
+        function openCamera() {
+            cameraModal.style.display = 'flex';
+            
+            // Request camera access
+            navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: facingMode
+                },
+                audio: false
+            })
+            .then(stream => {
+                currentStream = stream;
+                cameraFeed.srcObject = stream;
+            })
+            .catch(err => {
+                console.error('Error accessing camera:', err);
+                alert('Could not access camera. Please check permissions or try again.');
+                closeCamera();
+            });
+        }
+        
+        // Close camera modal
+        function closeCamera() {
+            cameraModal.style.display = 'none';
+            
+            // Stop camera stream
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+                currentStream = null;
+            }
+        }
+        
+        // Switch between front and back camera
+        function switchCamera() {
+            // Stop current stream
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+            }
+            
+            // Toggle facing mode
+            facingMode = facingMode === 'user' ? 'environment' : 'user';
+            
+            // Open camera with new facing mode
+            navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: facingMode
+                },
+                audio: false
+            })
+            .then(stream => {
+                currentStream = stream;
+                cameraFeed.srcObject = stream;
+            })
+            .catch(err => {
+                console.error('Error switching camera:', err);
+                alert('Could not switch camera. Please try again.');
+            });
+        }
+        
+        // Capture photo from camera
+        function capturePhoto() {
+            // Create canvas element
+            const canvas = document.createElement('canvas');
+            canvas.width = cameraFeed.videoWidth;
+            canvas.height = cameraFeed.videoHeight;
+            
+            // Draw video frame to canvas
+            const context = canvas.getContext('2d');
+            context.drawImage(cameraFeed, 0, 0, canvas.width, canvas.height);
+            
+            // Convert canvas to data URL
+            const dataURL = canvas.toDataURL('image/png');
+            
+            // Update drop area with captured image
+            dropArea.innerHTML = `
+                <img src="${dataURL}" alt="Captured Image" style="max-width: 100%; max-height: 200px; border-radius: 8px;">
+                <p style="margin-top: 10px;">Image captured</p>
+                <span class="drag-info">Click to change image</span>
+            `;
+            
+            // Close camera modal
+            closeCamera();
+        }
+        
+        // Analyze wound and show results
+        function analyzeWound() {
+            // Check if image is selected
+            const imageElement = dropArea.querySelector('img');
+            if (!imageElement) {
+                alert('Please upload or capture an image first.');
+                return;
+            }
+            
+            // Show loading state
+            analyzeBtn.innerHTML = `
+                <div class="loading" style="width: 20px; height: 20px; margin-right: 10px;"></div>
+                Analyzing...
+            `;
+            analyzeBtn.disabled = true;
+            
+            // Simulate analysis delay
+            setTimeout(() => {
+                // Update button state
+                analyzeBtn.innerHTML = 'Analyze & Get Recovery Tips';
+                analyzeBtn.disabled = false;
+                
+                // Show analysis result
+                analysisResult.style.display = 'block';
+                
+                // Scroll to result
+                analysisResult.scrollIntoView({ behavior: 'smooth' });
+                
+                // Update content based on pain level
+                updateAnalysisBasedOnPain();
+                
+                // Animate progress bar
+                const progressBar = document.querySelector('.progress-bar');
+                progressBar.style.width = '0%';
+                setTimeout(() => {
+                    progressBar.style.width = '65%';
+                }, 100);
+            }, 2000);
+        }
+        
+        // Update analysis content based on selected pain level
+        function updateAnalysisBasedOnPain() {
+            if (!selectedPainLevel) return;
+            
+            const severityElement = document.querySelector('.severity');
+            const progressBar = document.querySelector('.progress-bar');
+            const tipsContainer = document.querySelector('.recovery-tips');
+            
+            // Update severity based on pain level
+            if (selectedPainLevel <= 1) {
+                severityElement.className = 'severity severity-low';
+                severityElement.innerHTML = '<i class="fas fa-check-circle"></i><span>Minimal Concern</span>';
+                severityElement.style.color = 'var(--secondary)';
+                
+                progressBar.style.width = '85%';
+                progressBar.style.backgroundColor = 'var(--secondary)';
+            } else if (selectedPainLevel <= 3) {
+                severityElement.className = 'severity severity-moderate';
+                severityElement.innerHTML = '<i class="fas fa-exclamation-circle"></i><span>Moderate Concern</span>';
+                severityElement.style.color = 'var(--warning)';
+                
+                progressBar.style.width = '65%';
+                progressBar.style.backgroundColor = 'var(--primary)';
+            } else {
+                severityElement.className = 'severity severity-high';
+                severityElement.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>High Concern</span>';
+                severityElement.style.color = 'var(--danger)';
+                
+                progressBar.style.width = '40%';
+                progressBar.style.backgroundColor = 'var(--warning)';
+                
+                // Add additional tip for high pain
+                tipsContainer.innerHTML += `
+                <div class="tip-item" style="animation: fadeIn 0.5s">
+                    <div class="tip-icon" style="color: var(--warning);">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <div>
+                        <strong>Consult healthcare provider</strong>
+                        <p>With your high pain level, we recommend consulting your healthcare provider within 24 hours.</p>
+                    </div>
+                </div>
+                `;
+            }
+        }
+        
+        // Send chat message
+        function sendMessage() {
+            const message = chatInputField.value.trim();
+            if (!message) return;
+            
+            // Add outgoing message
+            addMessage(message, 'outgoing');
+            
+            // Clear input field
+            chatInputField.value = '';
+            
+            // Process message and generate response
+            processMessage(message);
+        }
+        
+        // Add message to chat
+        function addMessage(content, type) {
+            const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            const messageElement = document.createElement('div');
+            messageElement.className = `message ${type}`;
+            messageElement.innerHTML = `
+                <div class="message-content">
+                    ${content}
+                </div>
+                <div class="message-meta">Today, ${timestamp}</div>
+            `;
+            
+            chatBody.appendChild(messageElement);
+            
+            // Scroll to bottom
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+        
+        // Process message and generate response
+        function processMessage(message) {
+            // Simulate typing delay
+            setTimeout(() => {
+                // Simple response logic based on keywords
+                let response;
+                const lowerMessage = message.toLowerCase();
+                
+                if (lowerMessage.includes('pain') || lowerMessage.includes('hurt')) {
+                    response = "Pain management is crucial during recovery. Make sure you're taking prescribed medications as directed. For mild pain, over-the-counter options like acetaminophen might help. Remember to rest and elevate the affected area when possible.";
+                } else if (lowerMessage.includes('bandage') || lowerMessage.includes('dressing')) {
+                    response = "Change your bandage daily or whenever it gets wet or dirty. Before applying a new dressing, clean the wound gently with mild soap and water, then pat dry with a clean towel. Make sure the new bandage isn't too tight and allows some airflow.";
+                } else if (lowerMessage.includes('infection') || lowerMessage.includes('red') || lowerMessage.includes('swelling')) {
+                    response = "Signs of infection include increasing redness, warmth, swelling, unusual discharge, or fever. If you notice these symptoms, please contact your healthcare provider promptly. Keep the wound clean and continue any prescribed antibiotics.";
+                } else if (lowerMessage.includes('shower') || lowerMessage.includes('bath') || lowerMessage.includes('wash')) {
+                    response = "You can typically shower 24-48 hours after surgery, but follow your doctor's specific instructions. Let water run over the wound gently—don't scrub. Avoid baths, hot tubs, or swimming until your wound is fully healed.";
+                } else if (lowerMessage.includes('scar') || lowerMessage.includes('mark')) {
+                    response = "Some scarring is normal. Once your wound is fully healed, massage the area gently with moisturizer or silicone gel sheets to improve the appearance. Protect the area from sun exposure, as UV rays can darken scars.";
+                } else if (lowerMessage.includes('exercise') || lowerMessage.includes('activity') || lowerMessage.includes('move')) {
+                    response = "Follow your healthcare provider's activity restrictions. Generally, light walking is encouraged to promote circulation, but avoid strenuous activities that might stress the wound. Gradually increase activity as approved by your doctor.";
+                } else if (lowerMessage.includes('diet') || lowerMessage.includes('eat') || lowerMessage.includes('food')) {
+                    response = "Nutrition plays a key role in healing. Focus on protein-rich foods like lean meats, eggs, and beans. Vitamin C from fruits and vegetables helps collagen formation. Stay hydrated and consider zinc-rich foods like nuts and seeds.";
+                } else {
+                    response = "Thank you for your message. To better assist with your recovery, could you provide more specific details about your wound, symptoms, or concerns? I'm here to help with personalized advice for your healing journey.";
+                }
+                
+                // Add incoming message
+                addMessage(response, 'incoming');
+            }, 1000);
+        }
+        
+        // Animate elements on page load
+        function animateElements() {
+            // Add staggered animation to feature cards
+            const featureCards = document.querySelectorAll('.feature-card');
+            featureCards.forEach((card, index) => {
+                card.style.animationDelay = `${0.2 + (index * 0.2)}s`;
+            });
+        }
+        
+        // Initialize on page load
+        window.addEventListener('load', init);
+    </script>

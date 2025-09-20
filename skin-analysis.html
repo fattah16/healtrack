@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealTrack - Skin Disease Discovery</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Navbar */
+        nav {
+            background-color: white;
+            box-shadow: var(--shadow);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            animation: pulse 2s infinite;
+        }
+        
+        .logo i {
+            color: var(--secondary);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .nav-links a.active {
+            color: var(--primary);
+        }
+        
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #27ae60;
+        }
+        
+        .btn-outline {
+            border: 1px solid var(--primary);
+            background-color: transparent;
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        /* Main content */
+        main {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            width: 100%;
+        }
+        
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            color: #555;
+            max-width: 700px;
+            margin-bottom: 2rem;
+        }
+        
+        /* Skin Analysis Section */
+        .skin-analysis {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-bottom: 3rem;
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        .skin-analysis h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--dark);
+        }
+        
+        .analysis-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .capture-guidance {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .guidance-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .guidance-list {
+            list-style: none;
+        }
+        
+        .guidance-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+        
+        .guidance-list li i {
+            color: var(--secondary);
+            margin-top: 3px;
+        }
+        
+        .upload-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .upload-box {
+            width: 100%;
+            max-width: 500px;
+            border: 2px dashed var(--primary);
+            border-radius: 10px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upload-box:hover {
+            border-color: var(--secondary);
+            background-color: rgba(46, 204, 113, 0.05);
+        }
+        
+        .upload-box i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .upload-box p {
+            color: #555;
+            margin-bottom: 1rem;
+        }
+        
+        .drag-info {
+            font-size: 0.9rem;
+            color: #888;
+        }
+        
+        .camera-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .camera-btn:hover {
+            background-color: #27ae60;
+        }
+        
+        .symptom-checklist {
+            margin-top: 2rem;
+        }
+        
+        .symptom-checklist h3 {
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .symptom-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .symptom-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .symptom-option:hover {
+            border-color: var(--primary);
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+        
+        .symptom-option.selected {
+            border-color: var(--primary);
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+        
+        .symptom-option input {
+            margin: 0;
+        }
+        
+        .analyze-btn-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .analysis-result {
+            display: none;
+            border-top: 1px solid #eee;
+            padding-top: 2rem;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .result-container {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .confidence {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .confidence-high {
+            color: var(--secondary);
+        }
+        
+        .confidence-medium {
+            color: var(--warning);
+        }
+        
+        .confidence-low {
+            color: var(--danger);
+        }
+        
+        .disease-info {
+            margin-bottom: 1.5rem;
+        }
+        
+        .disease-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .disease-description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .disease-symptoms {
+            margin-bottom: 1.5rem;
+        }
+        
+        .symptoms-list {
+            list-style: none;
+        }
+        
+        .symptoms-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+        
+        .symptoms-list li i {
+            color: var(--primary);
+            margin-top: 3px;
+        }
+        
+        .recommendations {
+            margin-bottom: 1.5rem;
+        }
+        
+        .recommendation-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .recommendation-icon {
+            color: var(--primary);
+            margin-top: 3px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .action-btn {
+            flex: 1;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        /* Common Skin Conditions */
+        .common-conditions {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            animation: fadeIn 1s ease-in-out;
+            animation-delay: 0.2s;
+            animation-fill-mode: both;
+        }
+        
+        .common-conditions h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--dark);
+        }
+        
+        .conditions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .condition-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: transform 0.3s;
+        }
+        
+        .condition-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .condition-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .condition-name {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        
+        .condition-desc {
+            color: #555;
+            font-size: 0.9rem;
+            text-align: center;
+            line-height: 1.5;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+        
+        .footer-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-links a {
+            color: var(--light);
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+        
+        /* Camera Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            padding: 2rem;
+            animation: fadeIn 0.3s;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+        }
+        
+        .close-btn {
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #555;
+        }
+        
+        .camera-container {
+            margin-bottom: 1.5rem;
+        }
+        
+        #skin-camera-feed {
+            width: 100%;
+            height: 300px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .camera-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(52, 152, 219, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: rotate 1s ease-in-out infinite;
+            margin: 0 auto;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .symptom-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .conditions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+       
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>HealTrack</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="history.html">History</a>
+                <a href="resources.html">Resources</a>
+                <a href="skin-analysis.html" class="active">Skin Analysis</a>
+                <a href="products.html">Products</a>
+            </div>
+    </nav>
+    
+    <main>
+        <section class="hero">
+            <h1>Skin Disease Discovery</h1>
+            <p>Take a photo of your skin concern and get instant analysis with personalized recommendations. Our AI-powered tool helps identify common skin conditions and provides guidance on next steps.</p>
+        </section>
+        
+        <section class="skin-analysis">
+            <h2>Analyze Your Skin Concern</h2>
+            <div class="analysis-container">
+                <div class="capture-guidance">
+                    <div class="guidance-title">
+                        <i class="fas fa-lightbulb"></i>
+                        <h3>Capture Tips for Best Results</h3>
+                    </div>
+                    <ul class="guidance-list">
+                        <li><i class="fas fa-check-circle"></i> Ensure good lighting - natural light is best</li>
+                        <li><i class="fas fa-check-circle"></i> Focus on the affected area clearly</li>
+                        <li><i class="fas fa-check-circle"></i> Keep the camera steady</li>
+                        <li><i class="fas fa-check-circle"></i> Include some surrounding skin for context</li>
+                        <li><i class="fas fa-check-circle"></i> Take multiple angles if needed</li>
+                    </ul>
+                </div>
+                
+                <div class="upload-section">
+                    <div class="upload-box" id="skin-drop-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Drag & drop your skin photo here</p>
+                        <span class="drag-info">or click to select a file</span>
+                        <input type="file" id="skin-file-input" style="display: none;" accept="image/*">
+                    </div>
+                    <button class="btn camera-btn" id="open-skin-camera">
+                        <i class="fas fa-camera"></i>
+                        Take a photo now
+                    </button>
+                </div>
+                
+                <div class="symptom-checklist">
+                    <h3>Select any symptoms you're experiencing:</h3>
+                    <div class="symptom-grid">
+                        <label class="symptom-option">
+                            <input type="checkbox" name="symptoms" value="itching">
+                            <span>Itching</span>
+                        </label>
+                        <label class="symptom-option">
+                            <input type="checkbox" name="symptoms" value="pain">
+                            <span>Pain or tenderness</span>
+                        </label>
+                        <label class="symptom-option">
+                            <input type="checkbox" name="symptoms" value="redness">
+                            <span>Redness</span>
+                        </label>
+                        <label class="symptom-option">
+                            <input type="checkbox" name="symptoms" value="swelling">
+                            <span>Swelling</span>
+                        </label>
+                        <label class="symptom-option">
+                            <input type="checkbox" name="symptoms" value="blisters">
+                            <span>Blisters or bumps</span>
+                        </label>
+                        <label class="symptom-option">
+                            <input type="checkbox" name="symptoms" value="dryness">
+                            <span>Dryness or scaling</span>
+                        </label>
+                        <label class="symptom-option">
+                            <input type="checkbox" name="symptoms" value="discharge">
+                            <span>Discharge or oozing</span>
+                        </label>
+                        <label class="symptom-option">
+                            <input type="checkbox" name="symptoms" value="fever">
+                            <span>Fever</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="analyze-btn-container">
+                    <button class="btn btn-primary" id="analyze-skin-btn">
+                        Analyze Skin Condition
+                    </button>
+                </div>
+                
+                <div class="analysis-result" id="skin-analysis-result">
+                    <h3>Analysis Results</h3>
+                    <div class="result-container">
+                        <div class="result-header">
+                            <div class="confidence confidence-high">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>85% Confidence</span>
+                            </div>
+                            <span>Analyzed on <span id="analysis-date"></span></span>
+                        </div>
+                        
+                        <div class="disease-info">
+                            <div class="disease-name" id="disease-name">Eczema (Atopic Dermatitis)</div>
+                            <div class="disease-description" id="disease-description">
+                                A common condition that makes skin red and itchy. It's common in children but can occur at any age. Eczema is long-lasting (chronic) and tends to flare periodically.
+                            </div>
+                        </div>
+                        
+                        <div class="disease-symptoms">
+                            <h4>Common Symptoms:</h4>
+                            <ul class="symptoms-list" id="symptoms-list">
+                                <li><i class="fas fa-circle"></i> Dry, sensitive skin</li>
+                                <li><i class="fas fa-circle"></i> Intense itching</li>
+                                <li><i class="fas fa-circle"></i> Red, inflamed skin</li>
+                                <li><i class="fas fa-circle"></i> Dark colored patches</li>
+                                <li><i class="fas fa-circle"></i> Rough, leathery patches</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="recommendations">
+                            <h4>Recommended Actions:</h4>
+                            <div class="recommendation-item">
+                                <div class="recommendation-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div>
+                                    <strong>Moisturize regularly</strong>
+                                    <p>Use fragrance-free moisturizers multiple times daily</p>
+                                </div>
+                            </div>
+                            <div class="recommendation-item">
+                                <div class="recommendation-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div>
+                                    <strong>Avoid triggers</strong>
+                                    <p>Identify and avoid irritants like harsh soaps or allergens</p>
+                                </div>
+                            </div>
+                            <div class="recommendation-item">
+                                <div class="recommendation-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div>
+                                    <strong>Consult dermatologist</strong>
+                                    <p>Schedule an appointment for proper diagnosis and treatment plan</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="btn btn-primary action-btn">
+                                <i class="fas fa-calendar-alt"></i>
+                                Set Reminder
+                            </button>
+                            <button class="btn btn-outline action-btn">
+                                <i class="fas fa-file-medical"></i>
+                                Save to History
+                            </button>
+                            <button class="btn btn-secondary action-btn">
+                                <i class="fas fa-book-medical"></i>
+                                Learn More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="common-conditions">
+            <h2>Common Skin Conditions</h2>
+            <div class="conditions-grid">
+                <div class="condition-card">
+                    <div class="condition-icon">
+                        <i class="fas fa-allergies"></i>
+                    </div>
+                    <div class="condition-name">Eczema</div>
+                    <div class="condition-desc">
+                        Chronic condition causing itchy, inflamed skin. Often appears in childhood.
+                    </div>
+                </div>
+                
+                <div class="condition-card">
+                    <div class="condition-icon">
+                        <i class="fas fa-bacteria"></i>
+                    </div>
+                    <div class="condition-name">Acne</div>
+                    <div class="condition-desc">
+                        Clogged hair follicles with oil and dead skin cells, causing pimples.
+                    </div>
+                </div>
+                
+                <div class="condition-card">
+                    <div class="condition-icon">
+                        <i class="fas fa-virus"></i>
+                    </div>
+                    <div class="condition-name">Psoriasis</div>
+                    <div class="condition-desc">
+                        Autoimmune condition causing rapid skin cell buildup, creating scales.
+                    </div>
+                </div>
+                
+                <div class="condition-card">
+                    <div class="condition-icon">
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <div class="condition-name">Sun Damage</div>
+                    <div class="condition-desc">
+                        UV exposure effects including sunburn, aging, and increased cancer risk.
+                    </div>
+                </div>
+                
+                <div class="condition-card">
+                    <div class="condition-icon">
+                        <i class="fas fa-ring"></i>
+                    </div>
+                    <div class="condition-name">Ringworm</div>
+                    <div class="condition-desc">
+                        Fungal infection causing circular, ring-shaped rash on the skin.
+                    </div>
+                </div>
+                
+                <div class="condition-card">
+                    <div class="condition-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <div class="condition-name">Rosacea</div>
+                    <div class="condition-desc">
+                        Chronic skin condition causing facial redness and visible blood vessels.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>HealTrack</span>
+            </div>
+            <div class="footer-links">
+                <a href="#">About Us</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Help Center</a>
+                <a href="#">Contact Us</a>
+            </div>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+            <div class="copyright">
+                &copy; 2025 HealTrack. All rights reserved.
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Skin Camera Modal -->
+    <div class="modal" id="skin-camera-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Take Skin Photo</h3>
+                <button class="close-btn" id="close-skin-modal">&times;</button>
+            </div>
+            <div class="camera-container">
+                <video id="skin-camera-feed" autoplay></video>
+            </div>
+            <div class="camera-actions">
+                <button class="btn btn-primary" id="capture-skin-btn">
+                    <i class="fas fa-camera"></i>
+                    Capture Photo
+                </button>
+                <button class="btn btn-outline" id="switch-skin-camera">
+                    <i class="fas fa-sync"></i>
+                    Switch Camera
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // DOM elements
+        const skinDropArea = document.getElementById('skin-drop-area');
+        const skinFileInput = document.getElementById('skin-file-input');
+        const openSkinCameraBtn = document.getElementById('open-skin-camera');
+        const skinCameraModal = document.getElementById('skin-camera-modal');
+        const closeSkinModalBtn = document.getElementById('close-skin-modal');
+        const skinCameraFeed = document.getElementById('skin-camera-feed');
+        const captureSkinBtn = document.getElementById('capture-skin-btn');
+        const switchSkinCameraBtn = document.getElementById('switch-skin-camera');
+        const analyzeSkinBtn = document.getElementById('analyze-skin-btn');
+        const skinAnalysisResult = document.getElementById('skin-analysis-result');
+        const symptomOptions = document.querySelectorAll('.symptom-option');
+        const analysisDate = document.getElementById('analysis-date');
+        
+        // Global variables
+        let skinCurrentStream = null;
+        let skinFacingMode = 'environment';
+        let selectedSymptoms = [];
+        
+        // Skin disease database
+        const skinDiseases = {
+            eczema: {
+                name: "Eczema (Atopic Dermatitis)",
+                description: "A common condition that makes skin red and itchy. It's common in children but can occur at any age. Eczema is long-lasting (chronic) and tends to flare periodically.",
+                symptoms: [
+                    "Dry, sensitive skin",
+                    "Intense itching",
+                    "Red, inflamed skin",
+                    "Dark colored patches",
+                    "Rough, leathery patches",
+                    "Oozing or crusting",
+                    "Swelling"
+                ],
+                recommendations: [
+                    "Moisturize regularly with fragrance-free products",
+                    "Avoid triggers like harsh soaps and allergens",
+                    "Use mild, non-soap cleansers",
+                    "Apply topical corticosteroids as prescribed",
+                    "Take shorter, lukewarm showers",
+                    "Consult dermatologist for proper treatment"
+                ],
+                confidence: 85
+            },
+            acne: {
+                name: "Acne Vulgaris",
+                description: "A skin condition that occurs when hair follicles become plugged with oil and dead skin cells. It causes whiteheads, blackheads, or pimples.",
+                symptoms: [
+                    "Whiteheads (closed plugged pores)",
+                    "Blackheads (open plugged pores)",
+                    "Small red, tender bumps",
+                    "Pimples with pus at their tips",
+                    "Large, solid, painful lumps",
+                    "Painful, pus-filled lumps under skin"
+                ],
+                recommendations: [
+                    "Clean skin gently with mild cleanser",
+                    "Avoid picking or squeezing pimples",
+                    "Use oil-free, non-comedogenic products",
+                    "Consider over-the-counter treatments with benzoyl peroxide",
+                    "Avoid excessive sun exposure",
+                    "Consult dermatologist for severe cases"
+                ],
+                confidence: 78
+            },
+            psoriasis: {
+                name: "Psoriasis",
+                description: "A chronic autoimmune condition that causes the rapid buildup of skin cells. This buildup of cells causes scaling on the skin's surface.",
+                symptoms: [
+                    "Red patches of skin covered with thick scales",
+                    "Dry, cracked skin that may bleed",
+                    "Itching, burning, or soreness",
+                    "Thickened, pitted, or ridged nails",
+                    "Swollen and stiff joints"
+                ],
+                recommendations: [
+                    "Use moisturizers to reduce dryness",
+                    "Avoid triggers like stress and infections",
+                    "Consider phototherapy treatment",
+                    "Use topical treatments as prescribed",
+                    "Maintain healthy lifestyle habits",
+                    "Consult dermatologist for systemic treatments"
+                ],
+                confidence: 82
+            }
+        };
+
+        // Initialize
+        function initSkinAnalysis() {
+            setupSkinEventListeners();
+            setCurrentDate();
+        }
+
+        // Set current date for analysis
+        function setCurrentDate() {
+            const now = new Date();
+            analysisDate.textContent = now.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        // Setup event listeners
+        function setupSkinEventListeners() {
+            // File drop area functionality
+            skinDropArea.addEventListener('click', () => {
+                skinFileInput.click();
+            });
+
+            skinFileInput.addEventListener('change', handleSkinFileSelect);
+
+            skinDropArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                skinDropArea.style.borderColor = 'var(--secondary)';
+                skinDropArea.style.backgroundColor = 'rgba(46, 204, 113, 0.05)';
+            });
+
+            skinDropArea.addEventListener('dragleave', () => {
+                skinDropArea.style.borderColor = 'var(--primary)';
+                skinDropArea.style.backgroundColor = 'transparent';
+            });
+
+            skinDropArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                skinDropArea.style.borderColor = 'var(--primary)';
+                skinDropArea.style.backgroundColor = 'transparent';
+
+                if (e.dataTransfer.files.length) {
+                    handleSkinFiles(e.dataTransfer.files);
+                }
+            });
+
+            // Camera functionality
+            openSkinCameraBtn.addEventListener('click', openSkinCamera);
+            closeSkinModalBtn.addEventListener('click', closeSkinCamera);
+            captureSkinBtn.addEventListener('click', captureSkinPhoto);
+            switchSkinCameraBtn.addEventListener('click', switchSkinCamera);
+
+            // Symptom selection
+            symptomOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    const checkbox = option.querySelector('input');
+                    checkbox.checked = !checkbox.checked;
+                    
+                    if (checkbox.checked) {
+                        option.classList.add('selected');
+                    } else {
+                        option.classList.remove('selected');
+                    }
+                    
+                    updateSelectedSymptoms();
+                });
+            });
+
+            // Analyze button
+            analyzeSkinBtn.addEventListener('click', analyzeSkinCondition);
+        }
+
+        // Handle file selection
+        function handleSkinFileSelect(e) {
+            const files = e.target.files;
+            if (files.length) {
+                handleSkinFiles(files);
+            }
+        }
+
+        // Process selected files
+        function handleSkinFiles(files) {
+            const file = files[0];
+
+            // Check if file is an image
+            if (!file.type.match('image.*')) {
+                alert('Please select an image file.');
+                return;
+            }
+
+            // Display selected image
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                // Update drop area with image preview
+                skinDropArea.innerHTML = `
+                    <img src="${e.target.result}" alt="Skin Image" style="max-width: 100%; max-height: 200px; border-radius: 8px;">
+                    <p style="margin-top: 10px;">Image selected</p>
+                    <span class="drag-info">Click to change image</span>
+                `;
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        // Open camera modal
+        function openSkinCamera() {
+            skinCameraModal.style.display = 'flex';
+
+            // Request camera access
+            navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: skinFacingMode
+                },
+                audio: false
+            })
+            .then(stream => {
+                skinCurrentStream = stream;
+                skinCameraFeed.srcObject = stream;
+            })
+            .catch(err => {
+                console.error('Error accessing camera:', err);
+                alert('Could not access camera. Please check permissions or try again.');
+                closeSkinCamera();
+            });
+        }
+
+        // Close camera modal
+        function closeSkinCamera() {
+            skinCameraModal.style.display = 'none';
+
+            // Stop camera stream
+            if (skinCurrentStream) {
+                skinCurrentStream.getTracks().forEach(track => track.stop());
+                skinCurrentStream = null;
+            }
+        }
+
+        // Switch between front and back camera
+        function switchSkinCamera() {
+            // Stop current stream
+            if (skinCurrentStream) {
+                skinCurrentStream.getTracks().forEach(track => track.stop());
+            }
+
+            // Toggle facing mode
+            skinFacingMode = skinFacingMode === 'user' ? 'environment' : 'user';
+
+            // Open camera with new facing mode
+            navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: skinFacingMode
+                },
+                audio: false
+            })
+            .then(stream => {
+                skinCurrentStream = stream;
+                skinCameraFeed.srcObject = stream;
+            })
+            .catch(err => {
+                console.error('Error switching camera:', err);
+                alert('Could not switch camera. Please try again.');
+            });
+        }
+
+        // Capture photo from camera
+        function captureSkinPhoto() {
+            // Create canvas element
+            const canvas = document.createElement('canvas');
+            canvas.width = skinCameraFeed.videoWidth;
+            canvas.height = skinCameraFeed.videoHeight;
+
+            // Draw video frame to canvas
+            const context = canvas.getContext('2d');
+            context.drawImage(skinCameraFeed, 0, 0, canvas.width, canvas.height);
+
+            // Convert canvas to data URL
+            const dataURL = canvas.toDataURL('image/png');
+
+            // Update drop area with captured image
+            skinDropArea.innerHTML = `
+                <img src="${dataURL}" alt="Captured Skin Image" style="max-width: 100%; max-height: 200px; border-radius: 8px;">
+                <p style="margin-top: 10px;">Image captured</p>
+                <span class="drag-info">Click to change image</span>
+            `;
+
+            // Close camera modal
+            closeSkinCamera();
+        }
+
+        // Update selected symptoms
+        function updateSelectedSymptoms() {
+            selectedSymptoms = [];
+            document.querySelectorAll('input[name="symptoms"]:checked').forEach(checkbox => {
+                selectedSymptoms.push(checkbox.value);
+            });
+        }
+
+        // Analyze skin condition
+        function analyzeSkinCondition() {
+            // Check if image is selected
+            const imageElement = skinDropArea.querySelector('img');
+            if (!imageElement) {
+                alert('Please upload or capture an image first.');
+                return;
+            }
+
+            // Show loading state
+            analyzeSkinBtn.innerHTML = `
+                <div class="loading" style="width: 20px; height: 20px; margin-right: 10px;"></div>
+                Analyzing...
+            `;
+            analyzeSkinBtn.disabled = true;
+
+            // Simulate analysis delay
+            setTimeout(() => {
+                // Update button state
+                analyzeSkinBtn.innerHTML = 'Analyze Skin Condition';
+                analyzeSkinBtn.disabled = false;
+
+                // Show analysis result
+                skinAnalysisResult.style.display = 'block';
+
+                // Scroll to result
+                skinAnalysisResult.scrollIntoView({ behavior: 'smooth' });
+
+                // Simulate disease detection based on symptoms
+                const detectedDisease = simulateDiseaseDetection();
+                displayAnalysisResults(detectedDisease);
+            }, 2000);
+        }
+
+        // Simulate disease detection (for demo purposes)
+        function simulateDiseaseDetection() {
+            // Simple logic based on selected symptoms
+            if (selectedSymptoms.includes('itching') && selectedSymptoms.includes('redness')) {
+                return skinDiseases.eczema;
+            } else if (selectedSymptoms.includes('blisters') && selectedSymptoms.includes('pain')) {
+                return skinDiseases.acne;
+            } else if (selectedSymptoms.includes('dryness') && selectedSymptoms.includes('scaling')) {
+                return skinDiseases.psoriasis;
+            }
+            
+            // Default to eczema if no specific pattern
+            return skinDiseases.eczema;
+        }
+
+        // Display analysis results
+        function displayAnalysisResults(disease) {
+            const diseaseName = document.getElementById('disease-name');
+            const diseaseDescription = document.getElementById('disease-description');
+            const symptomsList = document.getElementById('symptoms-list');
+            const confidenceElement = document.querySelector('.confidence');
+
+            // Update disease info
+            diseaseName.textContent = disease.name;
+            diseaseDescription.textContent = disease.description;
+
+            // Update confidence level
+            confidenceElement.className = `confidence confidence-${getConfidenceLevel(disease.confidence)}`;
+            confidenceElement.innerHTML = `<i class="fas fa-shield-alt"></i><span>${disease.confidence}% Confidence</span>`;
+
+            // Update symptoms list
+            symptomsList.innerHTML = '';
+            disease.symptoms.forEach(symptom => {
+                symptomsList.innerHTML += `<li><i class="fas fa-circle"></i> ${symptom}</li>`;
+            });
+
+            // Update recommendations
+            const recommendations = document.querySelector('.recommendations');
+            recommendations.innerHTML = `
+                <h4>Recommended Actions:</h4>
+                ${disease.recommendations.map(rec => `
+                    <div class="recommendation-item">
+                        <div class="recommendation-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div>
+                            <strong>${rec.split(':')[0]}</strong>
+                            <p>${rec.split(':')[1] || rec}</p>
+                        </div>
+                    </div>
+                `).join('')}
+            `;
+        }
+
+        // Get confidence level class
+        function getConfidenceLevel(confidence) {
+            if (confidence >= 80) return 'high';
+            if (confidence >= 60) return 'medium';
+            return 'low';
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', initSkinAnalysis);
+    </script>
+    </body>

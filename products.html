@@ -1,0 +1,1355 @@
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealTrack - Authentic Skincare & Wound Recovery Products</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Navbar */
+        nav {
+            background-color: white;
+            box-shadow: var(--shadow);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            animation: pulse 2s infinite;
+        }
+        
+        .logo i {
+            color: var(--secondary);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .nav-links a.active {
+            color: var(--primary);
+        }
+        
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #27ae60;
+        }
+        
+        .btn-outline {
+            border: 1px solid var(--primary);
+            background-color: transparent;
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .cart-btn {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: var(--dark);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .cart-btn:hover {
+            color: var(--primary);
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        /* Main content */
+        main {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            width: 100%;
+        }
+        
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            color: #555;
+            max-width: 700px;
+            margin-bottom: 2rem;
+        }
+        
+        /* Category Filter */
+        .category-filter {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .category-btn {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--primary);
+            background-color: transparent;
+            color: var(--primary);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .category-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .category-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: transform 0.3s;
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+        
+        .product-info {
+            padding: 1.5rem;
+        }
+        
+        .product-category {
+            font-size: 0.8rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+        
+        .product-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .product-rating i {
+            color: var(--warning);
+            font-size: 0.9rem;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .add-to-cart-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .wishlist-btn {
+            background: none;
+            border: 1px solid #ddd;
+            color: #666;
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .wishlist-btn:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+        
+        /* Recommended Section */
+        .recommended-section {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-bottom: 3rem;
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        .recommended-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .recommended-header i {
+            font-size: 2rem;
+            color: var(--secondary);
+        }
+        
+        .recommended-header h2 {
+            color: var(--dark);
+        }
+        
+        /* Cart Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: fadeIn 0.3s;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            color: var(--dark);
+        }
+        
+        .close-btn {
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #555;
+        }
+        
+        .cart-items {
+            padding: 1.5rem;
+        }
+        
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .cart-item-image {
+            width: 60px;
+            height: 60px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .cart-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .cart-item-info {
+            flex: 1;
+        }
+        
+        .cart-item-name {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.3rem;
+        }
+        
+        .cart-item-price {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .quantity-btn {
+            background: none;
+            border: 1px solid #ddd;
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .quantity-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .cart-item-total {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .cart-summary {
+            padding: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .checkout-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        
+        .empty-cart i {
+            font-size: 3rem;
+            color: #ddd;
+            margin-bottom: 1rem;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+        
+        .footer-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-links a {
+            color: var(--light);
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .category-filter {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .product-actions {
+                flex-direction: column;
+            }
+            
+            .cart-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .cart-item-quantity {
+                justify-content: center;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>HealTrack</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="history.html">History</a>
+                <a href="resources.html">Resources</a>
+                <a href="skin-analysis.html">Skin Analysis</a>
+                <a href="products.html" class="active">Products</a>
+            </div>
+            <div class="user-actions">
+                <button class="cart-btn" id="cart-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </button>
+                <button class="btn btn-outline">Login</button>
+                <button class="btn btn-primary">Sign Up</button>
+            </div>
+        </div>
+    </nav>
+    
+    <main>
+        <section class="hero">
+            <h1>Authentic Skincare & Wound Recovery Products</h1>
+            <p>Discover premium, dermatologist-recommended products for your skin health and wound recovery journey. All products are carefully selected for quality and effectiveness.</p>
+        </section>
+        
+        <div class="category-filter" id="category-filter">
+            <button class="category-btn active" data-category="all">All Products</button>
+            <button class="category-btn" data-category="skincare">Skincare</button>
+            <button class="category-btn" data-category="wound-care">Wound Care</button>
+            <button class="category-btn" data-category="medical">Medical Supplies</button>
+            <button class="category-btn" data-category="recommended">Recommended</button>
+        </div>
+        
+        <!-- Recommended Products Section (shown when coming from skin analysis) -->
+        <div class="recommended-section" id="recommended-section" style="display: none;">
+            <div class="recommended-header">
+                <i class="fas fa-star"></i>
+                <h2>Recommended for Your Condition</h2>
+            </div>
+            <div class="products-grid" id="recommended-products">
+                <!-- Recommended products will be populated here -->
+            </div>
+        </div>
+        
+        <div class="products-grid" id="products-grid">
+            <!-- Product 1 -->
+            <div class="product-card" data-category="skincare">
+                <div class="product-image">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzNDk4ZGIiPk1vaXN0dXJpemluZyBDcmVhbTwvdGV4dD48L3N2Zz4=" alt="Moisturizing Cream">
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Skincare</div>
+                    <h3 class="product-name">Hydra-Heal Moisturizing Cream</h3>
+                    <p class="product-description">Advanced formula with hyaluronic acid and ceramides for deep hydration and skin barrier repair.</p>
+                    <div class="product-price">$24.99</div>
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                        <span>(128 reviews)</span>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn btn-primary add-to-cart-btn" data-product="1">
+                            <i class="fas fa-cart-plus"></i>
+                            Add to Cart
+                        </button>
+                        <button class="wishlist-btn">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product 2 -->
+            <div class="product-card" data-category="wound-care">
+                <div class="product-image">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzNDk4ZGIiPkFudGliaW90aWMgT2ludG1lbnQ8L3RleHQ+PC9zdmc+" alt="Antibiotic Ointment">
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Wound Care</div>
+                    <h3 class="product-name">HealFast Antibiotic Ointment</h3>
+                    <p class="product-description">Triple antibiotic formula to prevent infection and promote faster healing of minor cuts and burns.</p>
+                    <div class="product-price">$12.99</div>
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <span>(256 reviews)</span>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn btn-primary add-to-cart-btn" data-product="2">
+                            <i class="fas fa-cart-plus"></i>
+                            Add to Cart
+                        </button>
+                        <button class="wishlist-btn">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product 3 -->
+            <div class="product-card" data-category="medical">
+                <div class="product-image">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzNDk4ZGIiPlN0ZXJpbGUgQmFuZGFnZXM8L3RleHQ+PC9zdmc+" alt="Sterile Bandages">
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Medical Supplies</div>
+                    <h3 class="product-name">MediSafe Sterile Bandages</h3>
+                    <p class="product-description">Premium quality sterile bandages in various sizes for optimal wound protection and comfort.</p>
+                    <div class="product-price">$8.99</div>
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                        <span>(89 reviews)</span>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn btn-primary add-to-cart-btn" data-product="3">
+                            <i class="fas fa-cart-plus"></i>
+                            Add to Cart
+                        </button>
+                        <button class="wishlist-btn">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product 4 -->
+            <div class="product-card" data-category="skincare">
+                <div class="product-image">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzNDk4ZGIiPkVjemVtYSBDcmVhbTwvdGV4dD48L3N2Zz4=" alt="Eczema Cream">
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Skincare</div>
+                    <h3 class="product-name">Eczema Relief Cream</h3>
+                    <p class="product-description">Specialized formula with colloidal oatmeal to soothe itching and inflammation from eczema.</p>
+                    <div class="product-price">$19.99</div>
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                        <span>(167 reviews)</span>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn btn-primary add-to-cart-btn" data-product="4">
+                            <i class="fas fa-cart-plus"></i>
+                            Add to Cart
+                        </button>
+                        <button class="wishlist-btn">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product 5 -->
+            <div class="product-card" data-category="wound-care">
+                <div class="product-image">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzNDk4ZGIiPkh5ZHJvZ2VsIERyZXNzaW5nPC90ZXh0Pjwvc3ZnPg==" alt="Hydrogel Dressing">
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Wound Care</div>
+                    <h3 class="product-name">Advanced Hydrogel Dressing</h3>
+                    <p class="product-description">Cooling hydrogel dressing that creates optimal moist environment for wound healing.</p>
+                    <div class="product-price">$15.99</div>
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <span>(94 reviews)</span>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn btn-primary add-to-cart-btn" data-product="5">
+                            <i class="fas fa-cart-plus"></i>
+                            Add to Cart
+                        </button>
+                        <button class="wishlist-btn">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product 6 -->
+            <div class="product-card" data-category="medical">
+                <div class="product-image">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzNDk4ZGIiPk1lZGljYWwgVGFwZTwvdGV4dD48L3N2Zz4=" alt="Medical Tape">
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Medical Supplies</div>
+                    <h3 class="product-name">Hypoallergenic Medical Tape</h3>
+                    <p class="product-description">Gentle, breathable medical tape that secures dressings without irritating sensitive skin.</p>
+                    <div class="product-price">$6.99</div>
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                        <span>(73 reviews)</span>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn btn-primary add-to-cart-btn" data-product="6">
+                            <i class="fas fa-cart-plus"></i>
+                            Add to Cart
+                        </button>
+                        <button class="wishlist-btn">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product 7 -->
+            <div class="product-card" data-category="skincare">
+                <div class="product-image">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzNDk4ZGIiPlN1biBQcm90ZWN0aW9uPC90ZXh0Pjwvc3ZnPg==" alt="Sun Protection">
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Skincare</div>
+                    <h3 class="product-name">SPF 50+ Sun Protection Lotion</h3>
+                    <p class="product-description">Broad spectrum UVA/UVB protection with moisturizing ingredients for sensitive skin.</p>
+                    <div class="product-price">$22.99</div>
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <span>(201 reviews)</span>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn btn-primary add-to-cart-btn" data-product="7">
+                            <i class="fas fa-cart-plus"></i>
+                            Add to Cart
+                        </button>
+                        <button class="wishlist-btn">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product 8 -->
+            <div class="product-card" data-category="wound-care">
+                <div class="product-image">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzNDk4ZGIiPlNjYXIgVHJlYXRtZW50PC90ZXh0Pjwvc3ZnPg==" alt="Scar Treatment">
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Wound Care</div>
+                    <h3 class="product-name">Scar Reduction Gel</h3>
+                    <p class="product-description">Clinically proven silicone gel that reduces the appearance of scars and improves skin texture.</p>
+                    <div class="product-price">$29.99</div>
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                        <span>(142 reviews)</span>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn btn-primary add-to-cart-btn" data-product="8">
+                            <i class="fas fa-cart-plus"></i>
+                            Add to Cart
+                        </button>
+                        <button class="wishlist-btn">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Cart Modal -->
+    <div class="modal" id="cart-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Shopping Cart</h3>
+                <button class="close-btn" id="close-cart">&times;</button>
+            </div>
+            <div class="cart-items" id="cart-items">
+                <div class="empty-cart" id="empty-cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <p>Your cart is empty</p>
+                </div>
+            </div>
+            <div class="cart-summary" id="cart-summary" style="display: none;">
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span id="cart-total">$0.00</span>
+                </div>
+                <button class="btn btn-primary checkout-btn">
+                    <i class="fas fa-lock"></i>
+                    Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>HealTrack</span>
+            </div>
+            <div class="footer-links">
+                <a href="#">About Us</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Help Center</a>
+                <a href="#">Contact Us</a>
+            </div>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+            <div class="copyright">
+                &copy; 2025 HealTrack. All rights reserved.
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Complete Product database
+        const products = {
+            1: { 
+                name: "Hydra-Heal Moisturizing Cream", 
+                price: 24.99, 
+                category: "skincare", 
+                image: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzNDk4ZGIiPk1vaXN0dXJpemluZyBDcmVhbTwvdGV4dD48L3N2Zz4=",
+                description: "Advanced formula with hyaluronic acid and ceramides for deep hydration and skin barrier repair."
+            },
+            2: { 
+                name: "HealFast Antibiotic Ointment", 
+                price: 12.99, 
+                category: "wound-care", 
+                image: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzNDk4ZGIiPkFudGliaW90aWMgT2ludG1lbnQ8L3RleHQ+PC9zdmc+",
+                description: "Triple antibiotic formula to prevent infection and promote faster healing of minor cuts and burns."
+            },
+            3: { 
+                name: "MediSafe Sterile Bandages", 
+                price: 8.99, 
+                category: "medical", 
+                image: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzNDk4ZGIiPlN0ZXJpbGUgQmFuZGFnZXM8L3RleHQ+PC9zdmc+",
+                description: "Premium quality sterile bandages in various sizes for optimal wound protection and comfort."
+            },
+            4: { 
+                name: "Eczema Relief Cream", 
+                price: 19.99, 
+                category: "skincare", 
+                image: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzNDk4ZGIiPkVjemVtYSBDcmVhbTwvdGV4dD48L3N2Zz4=",
+                description: "Specialized formula with colloidal oatmeal to soothe itching and inflammation from eczema."
+            },
+            5: { 
+                name: "Advanced Hydrogel Dressing", 
+                price: 15.99, 
+                category: "wound-care", 
+                image: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVctdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzNDk4ZGIiPkh5ZHJvZ2VsIERyZXNzaW5nPC90ZXh0Pjwvc3ZnPg==",
+                description: "Cooling hydrogel dressing that creates optimal moist environment for wound healing."
+            },
+            6: { 
+                name: "Hypoallergenic Medical Tape", 
+                price: 6.99, 
+                category: "medical", 
+                image: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzNDk4ZGIiPk1lZGljYWwgVGFwZTwvdGV4dD48L3N2Zz4=",
+                description: "Gentle, breathable medical tape that secures dressings without irritating sensitive skin."
+            },
+            7: { 
+                name: "SPF 50+ Sun Protection Lotion", 
+                price: 22.99, 
+                category: "skincare", 
+                image: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzNDk4ZGIiPlN1biBQcm90ZWN0aW9uPC90ZXh0Pjwvc3ZnPg==",
+                description: "Broad spectrum UVA/UVB protection with moisturizing ingredients for sensitive skin."
+            },
+            8: { 
+                name: "Scar Reduction Gel", 
+                price: 29.99, 
+                category: "wound-care", 
+                image: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzNDk4ZGIiPlNjYXIgVHJlYXRtZW50PC90ZXh0Pjwvc3ZnPg==",
+                description: "Clinically proven silicone gel that reduces the appearance of scars and improves skin texture."
+            }
+        };
+
+        // Shopping cart functionality
+        let cart = JSON.parse(localStorage.getItem('healtrack_cart')) || {};
+        let wishlist = JSON.parse(localStorage.getItem('healtrack_wishlist')) || {};
+
+        // DOM Elements
+        const cartBtn = document.getElementById('cart-btn');
+        const cartCount = document.getElementById('cart-count');
+        const cartModal = document.getElementById('cart-modal');
+        const closeCartBtn = document.getElementById('close-cart');
+        const cartItems = document.getElementById('cart-items');
+        const emptyCart = document.getElementById('empty-cart');
+        const cartSummary = document.getElementById('cart-summary');
+        const cartTotal = document.getElementById('cart-total');
+        const categoryFilter = document.getElementById('category-filter');
+        const productsGrid = document.getElementById('products-grid');
+        const recommendedSection = document.getElementById('recommended-section');
+        const recommendedProducts = document.getElementById('recommended-products');
+
+        // Initialize the page
+        function init() {
+            updateCartCount();
+            setupEventListeners();
+            checkForRecommendedProducts();
+            updateWishlistIcons();
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Cart functionality
+            cartBtn.addEventListener('click', openCart);
+            closeCartBtn.addEventListener('click', closeCart);
+            cartModal.addEventListener('click', (e) => {
+                if (e.target === cartModal) closeCart();
+            });
+
+            // Category filtering
+            categoryFilter.addEventListener('click', (e) => {
+                if (e.target.classList.contains('category-btn')) {
+                    const category = e.target.dataset.category;
+                    filterProducts(category);
+                    updateActiveCategoryButton(e.target);
+                }
+            });
+
+            // Add to cart buttons
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('add-to-cart-btn') || e.target.closest('.add-to-cart-btn')) {
+                    const btn = e.target.classList.contains('add-to-cart-btn') ? e.target : e.target.closest('.add-to-cart-btn');
+                    const productId = btn.dataset.product;
+                    addToCart(productId);
+                    animateAddToCart(btn);
+                }
+            });
+
+            // Wishlist buttons
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('wishlist-btn') || e.target.closest('.wishlist-btn')) {
+                    const btn = e.target.classList.contains('wishlist-btn') ? e.target : e.target.closest('.wishlist-btn');
+                    const productCard = btn.closest('.product-card');
+                    const productId = productCard ? Array.from(productCard.parentNode.children).indexOf(productCard) + 1 : null;
+                    if (productId) toggleWishlist(productId, btn);
+                }
+            });
+        }
+
+        // Cart functionality
+        function addToCart(productId) {
+            if (cart[productId]) {
+                cart[productId].quantity += 1;
+            } else {
+                cart[productId] = {
+                    quantity: 1,
+                    product: products[productId]
+                };
+            }
+            updateCart();
+        }
+
+        function removeFromCart(productId) {
+            delete cart[productId];
+            updateCart();
+        }
+
+        function updateCartQuantity(productId, quantity) {
+            if (quantity <= 0) {
+                removeFromCart(productId);
+            } else {
+                cart[productId].quantity = quantity;
+                updateCart();
+            }
+        }
+
+        function updateCart() {
+            updateCartCount();
+            updateCartDisplay();
+            saveCartToStorage();
+        }
+
+        function updateCartCount() {
+            const totalItems = Object.values(cart).reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
+        }
+
+        function updateCartDisplay() {
+            const cartItemsArray = Object.entries(cart);
+            
+            if (cartItemsArray.length === 0) {
+                emptyCart.style.display = 'block';
+                cartSummary.style.display = 'none';
+                cartItems.innerHTML = '';
+                return;
+            }
+
+            emptyCart.style.display = 'none';
+            cartSummary.style.display = 'block';
+
+            let total = 0;
+            let itemsHTML = '';
+
+            cartItemsArray.forEach(([productId, item]) => {
+                const productTotal = item.product.price * item.quantity;
+                total += productTotal;
+
+                itemsHTML += `
+                    <div class="cart-item" data-product="${productId}">
+                        <div class="cart-item-image">
+                            <img src="${item.product.image}" alt="${item.product.name}">
+                        </div>
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${item.product.name}</div>
+                            <div class="cart-item-price">$${item.product.price.toFixed(2)}</div>
+                            <div class="cart-item-quantity">
+                                <button class="quantity-btn" onclick="updateCartQuantity(${productId}, ${item.quantity - 1})">-</button>
+                                <span>${item.quantity}</span>
+                                <button class="quantity-btn" onclick="updateCartQuantity(${productId}, ${item.quantity + 1})">+</button>
+                            </div>
+                        </div>
+                        <div class="cart-item-total">$${productTotal.toFixed(2)}</div>
+                        <button class="quantity-btn" onclick="removeFromCart(${productId})" style="margin-left: 10px;">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            });
+
+            cartItems.innerHTML = itemsHTML;
+            cartTotal.textContent = `$${total.toFixed(2)}`;
+        }
+
+        function openCart() {
+            updateCartDisplay();
+            cartModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCart() {
+            cartModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function saveCartToStorage() {
+            localStorage.setItem('healtrack_cart', JSON.stringify(cart));
+        }
+
+        // Product filtering
+        function filterProducts(category) {
+            const productCards = productsGrid.querySelectorAll('.product-card');
+            
+            productCards.forEach(card => {
+                const productCategory = card.dataset.category;
+                const shouldShow = category === 'all' || 
+                                 category === 'recommended' && card.dataset.recommended === 'true' ||
+                                 productCategory === category;
+                
+                card.style.display = shouldShow ? 'block' : 'none';
+                
+                if (shouldShow) {
+                    card.style.animation = 'none';
+                    setTimeout(() => {
+                        card.style.animation = 'fadeIn 0.5s ease-in-out';
+                    }, 10);
+                }
+            });
+
+            // Show recommended section if filtering by recommended
+            if (category === 'recommended') {
+                recommendedSection.style.display = 'block';
+            } else {
+                recommendedSection.style.display = 'none';
+            }
+        }
+
+        function updateActiveCategoryButton(activeButton) {
+            const buttons = categoryFilter.querySelectorAll('.category-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            activeButton.classList.add('active');
+        }
+
+        // Wishlist functionality
+        function toggleWishlist(productId, button) {
+            if (wishlist[productId]) {
+                delete wishlist[productId];
+                button.innerHTML = '<i class="far fa-heart"></i>';
+                button.style.color = '#666';
+                button.style.borderColor = '#ddd';
+            } else {
+                wishlist[productId] = true;
+                button.innerHTML = '<i class="fas fa-heart"></i>';
+                button.style.color = 'var(--danger)';
+                button.style.borderColor = 'var(--danger)';
+            }
+            saveWishlistToStorage();
+        }
+
+        function updateWishlistIcons() {
+            const wishlistButtons = document.querySelectorAll('.wishlist-btn');
+            wishlistButtons.forEach((button, index) => {
+                const productId = index + 1;
+                if (wishlist[productId]) {
+                    button.innerHTML = '<i class="fas fa-heart"></i>';
+                    button.style.color = 'var(--danger)';
+                    button.style.borderColor = 'var(--danger)';
+                }
+            });
+        }
+
+        function saveWishlistToStorage() {
+            localStorage.setItem('healtrack_wishlist', JSON.stringify(wishlist));
+        }
+
+        // Recommended products
+        function checkForRecommendedProducts() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const recommended = urlParams.get('recommended');
+            
+            if (recommended) {
+                // Mark recommended products (for demo, let's recommend products 1, 4, 7)
+                const recommendedIds = [1, 4, 7];
+                const productCards = productsGrid.querySelectorAll('.product-card');
+                
+                recommendedIds.forEach(id => {
+                    if (productCards[id - 1]) {
+                        productCards[id - 1].dataset.recommended = 'true';
+                    }
+                });
+
+                // Show recommended section
+                recommendedSection.style.display = 'block';
+                
+                // Populate recommended products grid
+                let recommendedHTML = '';
+                recommendedIds.forEach(id => {
+                    const product = products[id];
+                    if (product) {
+                        recommendedHTML += `
+                            <div class="product-card" data-category="${product.category}" data-recommended="true">
+                                <div class="product-image">
+                                    <img src="${product.image}" alt="${product.name}">
+                                </div>
+                                <div class="product-info">
+                                    <div class="product-category">${product.category.replace('-', ' ').toUpperCase()}</div>
+                                    <h3 class="product-name">${product.name}</h3>
+                                    <p class="product-description">${product.description}</p>
+                                    <div class="product-price">$${product.price.toFixed(2)}</div>
+                                    <div class="product-actions">
+                                        <button class="btn btn-primary add-to-cart-btn" data-product="${id}">
+                                            <i class="fas fa-cart-plus"></i>
+                                            Add to Cart
+                                        </button>
+                                        <button class="wishlist-btn">
+                                            <i class="far fa-heart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+                
+                recommendedProducts.innerHTML = recommendedHTML;
+                updateWishlistIcons();
+            }
+        }
+
+        // Animation effects
+        function animateAddToCart(button) {
+            button.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                button.style.transform = 'scale(1)';
+            }, 150);
+            
+            // Create flying cart animation
+            const rect = button.getBoundingClientRect();
+            const flyingItem = document.createElement('div');
+            flyingItem.style.position = 'fixed';
+            flyingItem.style.left = rect.left + 'px';
+            flyingItem.style.top = rect.top + 'px';
+            flyingItem.style.width = '20px';
+            flyingItem.style.height = '20px';
+            flyingItem.style.background = 'var(--primary)';
+            flyingItem.style.borderRadius = '50%';
+            flyingItem.style.zIndex = '1000';
+            flyingItem.style.transition = 'all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1)';
+            
+            document.body.appendChild(flyingItem);
+            
+            setTimeout(() => {
+                const cartRect = cartBtn.getBoundingClientRect();
+                flyingItem.style.left = (cartRect.left + cartRect.width / 2 - 10) + 'px';
+                flyingItem.style.top = (cartRect.top + cartRect.height / 2 - 10) + 'px';
+                flyingItem.style.transform = 'scale(0.5)';
+                flyingItem.style.opacity = '0';
+            }, 10);
+            
+            setTimeout(() => {
+                document.body.removeChild(flyingItem);
+            }, 800);
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', init);
+
+        // Make functions available globally for onclick attributes
+        window.updateCartQuantity = updateCartQuantity;
+        window.removeFromCart = removeFromCart;
+    </script>
+    </body>

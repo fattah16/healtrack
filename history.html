@@ -80,6 +80,39 @@
         .nav-links a:hover {
             color: var(--primary);
         }
+
+        .mobile-menu-btn {
+            color:black;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: none;
+        }
+        
+        .mobile-menu {
+            display: none;
+            background-color:  #3498db;
+            padding: 20px;
+        }
+        
+        .mobile-menu a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 15px;
+        }
+        
+        .mobile-menu button {
+            background-color: #059669;
+            color: white;
+            padding: 8px;
+            border-radius: 4px;
+            border: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
         main {
             flex: 1;
             max-width: 1200px;
@@ -164,6 +197,9 @@
             .nav-links {
                 display: none;
             }
+            .mobile-menu-btn {
+                display: block;
+            }
             main {
                 margin: 1rem;
             }
@@ -191,6 +227,19 @@
                 <a href="skin-analysis.html">Skin Analysis</a>
                 <a href="products.html">Products</a>
             </div>
+            <button class="mobile-menu-btn" id="mobile-menu-button">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobile-menu">
+           <a href="index.html">Home</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="history.html">History</a>
+                <a href="resources.html">Resources</a>
+                <a href="skin-analysis.html">Skin Analysis</a>
+                <a href="products.html">Products</a>
+        </div>
            
         </div>
     </nav>
@@ -251,5 +300,12 @@
             </div>
         </div>
     </footer>
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+    </script>
 </body>
 </html>
